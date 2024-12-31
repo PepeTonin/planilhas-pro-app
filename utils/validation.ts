@@ -8,3 +8,10 @@ export const validatePassword = (password: string): boolean => {
   const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&\-#])[A-Za-z\d@$!%*?&\-#]{8,}$/;
   return re.test(password);
 };
+
+
+// at least 1 letter and 1 number
+export const validatePasswordDevelop = (password: string): boolean => {
+  const re = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
+  return re.test(password);
+};

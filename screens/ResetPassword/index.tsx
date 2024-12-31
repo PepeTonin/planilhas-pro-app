@@ -15,16 +15,17 @@ import { styles } from "./style";
 import StyledTextInput from "../../components/StyledTextInput";
 import ScreenTitle from "../../components/ScreenTitle";
 import PrimaryButton from "../../components/PrimaryButton";
-import { sendResetPasswordRequest } from "../../utils/firebaseAuthRequests";
 import { validateEmail } from "../../utils/validation";
 
-interface Props {
+interface ResetPasswordScreenProps {
   routePathnames: {
     login: string;
   };
 }
 
-export default function ResetPasswordScreen({ routePathnames }: Props) {
+export default function ResetPasswordScreen({
+  routePathnames,
+}: ResetPasswordScreenProps) {
   const [email, setEmail] = useState<string>("");
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
 
@@ -40,7 +41,7 @@ export default function ResetPasswordScreen({ routePathnames }: Props) {
     }
     setIsEmailValid(true);
 
-    sendResetPasswordRequest(email);
+    // sendResetPasswordRequest(email);
 
     Toast.show({
       type: "success",

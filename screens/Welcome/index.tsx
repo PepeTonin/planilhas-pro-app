@@ -5,28 +5,28 @@ import { styles } from "./style";
 import PrimaryButton from "../../components/PrimaryButton";
 import WelcomeImage from "../../components/WelcomeImage";
 
-interface Props {
+interface WelcomeScreenProps {
   routePathnames: {
     login: string;
     signup: string;
   };
 }
 
-export default function WelcomeScreen({ routePathnames }: Props) {
+export default function WelcomeScreen({ routePathnames }: WelcomeScreenProps) {
   return (
     <View style={styles.rootContainer}>
-      <WelcomeImage title={"Welcome to BeFit\nThe fitness app"} />
+      <WelcomeImage title={"Planilhas Pro"} />
 
       <View style={styles.buttonsContainer}>
         <PrimaryButton
           link
           pathname={routePathnames.login}
-          label="Login with existing account"
+          label="Entrar com conta existente"
         />
         <PrimaryButton
           link
           pathname={routePathnames.signup}
-          label="Create your account"
+          label="Criar conta"
         />
       </View>
     </View>

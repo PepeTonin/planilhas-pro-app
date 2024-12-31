@@ -42,15 +42,13 @@ export default function PrimaryButton({
   return (
     <Pressable
       style={[styles.container, (isDisabled || isLoading) && styles.disabled]}
-      disabled={isDisabled || isLoading}
+      disabled={isDisabled || isLoading || hasLoadedSuccessfully}
       onPress={onPress}
     >
       {isLoading ? (
-        hasLoadedSuccessfully ? (
-          <Entypo name="check" size={28} color={Colors.primaryGreen} />
-        ) : (
-          <ActivityIndicator size="small" color={Colors.primaryGreen} />
-        )
+        <ActivityIndicator size="small" color={Colors.primaryGreen} />
+      ) : hasLoadedSuccessfully ? (
+        <Entypo name="check" size={28} color={Colors.primaryBlack} />
       ) : (
         <Text style={styles.innerText}>{label}</Text>
       )}

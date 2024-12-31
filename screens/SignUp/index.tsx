@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import Toast from "react-native-toast-message";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -6,25 +8,34 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import Toast from "react-native-toast-message";
+
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import {
+  clearAccountCreated,
+  clearError,
+  signup,
+} from "../../store/features/auth";
 
 import { styles } from "./style";
 
-import { validateEmail, validatePassword } from "../../utils/validation";
-import { useAuth } from "../../contexts/AuthContext";
+import {
+  validateEmail,
+  validatePassword,
+  validatePasswordDevelop,
+} from "../../utils/validation";
+
 import WelcomeImage from "../../components/WelcomeImage";
 import StyledTextInput from "../../components/StyledTextInput";
 import PrimaryButton from "../../components/PrimaryButton";
-import { router } from "expo-router";
 import TextWithLink from "../../components/TextWithLink";
 
-interface Props {
+interface SignUpScreenProps {
   routePathnames: {
     login: string;
   };
 }
 
-export default function SignUpScreen({ routePathnames }: Props) {
+export default function SignUpScreen({ routePathnames }: SignUpScreenProps) {
   const [name, setName] = useState<string>("");
   const [isNameValid, setIsNameValid] = useState<boolean>(true);
 
@@ -38,76 +49,67 @@ export default function SignUpScreen({ routePathnames }: Props) {
   const [isConfirmPasswordValid, setIsConfirmPasswordValid] =
     useState<boolean>(true);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isAccountCreated, setIsAccountCreated] = useState<boolean>(false);
-
-  const { requestAccountCreation } = useAuth();
+  const dispatch = useAppDispatch();
+  const { hasError, isLogging, isAccountCreated } = useAppSelector(
+    (state) => state.auth
+  );
 
   async function handleSignUp() {
-    setIsLoading(true);
-
     if (!name) {
       setIsNameValid(false);
-      setIsLoading(false);
       return;
     }
     setIsNameValid(true);
 
     if (!validateEmail(email)) {
       setIsEmailValid(false);
-      setIsLoading(false);
       return;
     }
     setIsEmailValid(true);
 
-    if (!validatePassword(password)) {
+    if (!validatePasswordDevelop(password)) {
       setIsPasswordValid(false);
-      setIsLoading(false);
       return;
     }
     setIsPasswordValid(true);
 
     if (password !== confirmPassword) {
       setIsConfirmPasswordValid(false);
-      setIsLoading(false);
       return;
     }
     setIsConfirmPasswordValid(true);
 
-    const response = await requestAccountCreation(name, email, password);
-
-    if (!response) {
-      Toast.show({
-        type: "error",
-        text1: "Error creating account",
-        visibilityTime: 2500,
-        onShow: () => setIsLoading(false),
-      });
-      return;
-    }
-
-    if (response === "auth/email-already-in-use") {
-      Toast.show({
-        type: "error",
-        text1: "Email already in use",
-        visibilityTime: 2500,
-        onShow: () => setIsLoading(false),
-      });
-      return;
-    }
-
-    setIsAccountCreated(true);
-
-    Toast.show({
-      type: "success",
-      text1: "Account created!",
-      visibilityTime: 2500,
-      onHide: () => {
-        router.replace(routePathnames.login);
-        setIsLoading(false);
-      },
-    });
+    await dispatch(signup({ name, email, password }));
   }
+
+  useEffect(() => {
+    if (hasError) {
+      Toast.show({
+        type: "error",
+        text1: "Erro na criação de conta",
+        visibilityTime: 2500,
+        onHide: () => dispatch(clearError()),
+      });
+    }
+  }, [hasError]);
+
+  useEffect(() => {
+    if (isAccountCreated) {
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      Toast.show({
+        type: "success",
+        text1: "Conta criada",
+        visibilityTime: 2500,
+        onHide: () => {
+          dispatch(clearAccountCreated());
+          router.replace(routePathnames.login);
+        },
+      });
+    }
+  }, [isAccountCreated]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -115,18 +117,18 @@ export default function SignUpScreen({ routePathnames }: Props) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.rootContainer}
       >
-        <WelcomeImage title={"Create a\nnew account"} />
+        <WelcomeImage title={"Criar nova conta"} />
 
         <Toast />
 
         <View style={styles.contentContainer}>
           <StyledTextInput
-            placeholder="Name you want to be called"
+            placeholder="Nome"
             value={name}
             onChangeText={setName}
             autoCapitalize="words"
             isValid={isNameValid}
-            invalidTextShown="Name cannot be empty"
+            invalidTextShown="Nome não pode estar vazio"
           />
 
           <StyledTextInput
@@ -136,37 +138,37 @@ export default function SignUpScreen({ routePathnames }: Props) {
             keyboardType="email-address"
             autoCapitalize="none"
             isValid={isEmailValid}
-            invalidTextShown={"Invalid email address"}
+            invalidTextShown={"Email inválido"}
           />
 
           <StyledTextInput
-            placeholder="Password"
+            placeholder="Senha"
             value={password}
             onChangeText={setPassword}
             isPassword
             isValid={isPasswordValid}
-            invalidTextShown="Password must be at least 8 characters long, with at least 1 lower case, 1 upper case, 1 special char and 1 number"
+            invalidTextShown="A senha deve ter pelo menos 8 caracteres, contendo pelo menos 1 letra e 1 número."
           />
 
           <StyledTextInput
-            placeholder="Confirm Password"
+            placeholder="Confirme sua senha"
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             isPassword
             isValid={isConfirmPasswordValid}
-            invalidTextShown="Passwords do not match"
+            invalidTextShown="Senhas não são iguais"
           />
 
           <PrimaryButton
             pathname={routePathnames.login}
-            label="Sign Up"
+            label="Criar conta"
             onPress={handleSignUp}
-            isLoading={isLoading}
+            isLoading={isLogging}
             hasLoadedSuccessfully={isAccountCreated}
           />
 
           <TextWithLink
-            linkText="or login with an existing account"
+            linkText="ou entre com uma conta existente"
             pathname={routePathnames.login}
           />
         </View>

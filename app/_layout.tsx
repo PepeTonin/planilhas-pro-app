@@ -4,8 +4,9 @@ import { Slot } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
+import { Provider } from "react-redux";
 
-import { AuthProvider } from "../contexts/AuthContext";
+import { store } from "../store/store";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,10 +30,10 @@ export default function App() {
   }
 
   return (
-    <AuthProvider>
+    <Provider store={store}>
       <StatusBar style="light" />
       <Slot screenOptions={{ headerShown: false }} initialRouteName="(app)" />
-    </AuthProvider>
+    </Provider>
   );
 }
 

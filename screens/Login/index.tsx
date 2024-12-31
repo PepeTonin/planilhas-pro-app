@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Toast from "react-native-toast-message";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -6,43 +7,61 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import Toast from "react-native-toast-message";
 
 import { styles } from "./style";
 
-import { useAuth } from "../../contexts/AuthContext";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { clearError, login } from "../../store/features/auth";
+
 import StyledTextInput from "../../components/StyledTextInput";
 import PrimaryButton from "../../components/PrimaryButton";
 import TextWithLink from "../../components/TextWithLink";
 import WelcomeImage from "../../components/WelcomeImage";
+import { router } from "expo-router";
+import { validateEmail } from "../../utils/validation";
 
-interface Props {
+interface LoginScreenProps {
   routePathnames: {
     resetPassword: string;
     signup: string;
   };
 }
 
-export default function LoginScreen({ routePathnames }: Props) {
+export default function LoginScreen({ routePathnames }: LoginScreenProps) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const { requestLoginWithEmailAndPass } = useAuth();
+  const dispatch = useAppDispatch();
+  const { isLogging, isLogged, hasError } = useAppSelector(
+    (state) => state.auth
+  );
 
   async function handleLogin() {
-    setIsLoading(true);
-    const response = await requestLoginWithEmailAndPass(email, password);
-    if (!response) {
+    if (!validateEmail(email) || !password) {
       Toast.show({
         type: "error",
-        text1: "Invalid email or password!",
+        text1: "Preencha os campos corretamente!",
         visibilityTime: 2500,
-        onShow: () => setIsLoading(false),
+      });
+      return;
+    }
+    await dispatch(login({ email, password }));
+  }
+
+  useEffect(() => {
+    if (hasError) {
+      Toast.show({
+        type: "error",
+        text1: "Email ou senha inválidos!",
+        visibilityTime: 2500,
+        onHide: () => dispatch(clearError()),
       });
     }
-  }
+  }, [hasError]);
+
+  useEffect(() => {
+    if (isLogged) router.push("/(home)/");
+  }, [isLogged]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -50,7 +69,7 @@ export default function LoginScreen({ routePathnames }: Props) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.rootContainer}
       >
-        <WelcomeImage title={"Login with\nexisting account"} />
+        <WelcomeImage title={"Entrar com conta existente"} />
 
         <Toast />
 
@@ -64,7 +83,7 @@ export default function LoginScreen({ routePathnames }: Props) {
           />
 
           <StyledTextInput
-            placeholder="Password"
+            placeholder="Senha"
             value={password}
             onChangeText={setPassword}
             isPassword
@@ -72,19 +91,19 @@ export default function LoginScreen({ routePathnames }: Props) {
 
           <TextWithLink
             containerCustomStyle={{ justifyContent: "flex-end" }}
-            text="Forgot password?"
-            linkText="Reset password"
+            text="Esqueceu a senha?"
+            linkText="Resete sua senha"
             pathname={routePathnames.resetPassword}
           />
 
           <PrimaryButton
-            isLoading={isLoading}
-            label="Login"
+            isLoading={isLogging}
+            label="Entrar"
             onPress={handleLogin}
           />
 
           <TextWithLink
-            linkText="or create an new account"
+            linkText="ou crie uma nova conta"
             pathname={routePathnames.signup}
           />
         </View>
