@@ -11,13 +11,13 @@ export const styles = StyleSheet.create({
   },
   text: {
     color: Colors.white,
-    fontFamily: Fonts.families.Bold,
+    fontFamily: Fonts.families.Regular,
     fontSize: Fonts.sizes.sm,
     marginRight: 6,
   },
   linkText: {
     color: Colors.primaryGreen,
-    fontFamily: Fonts.families.SemiBold,
+    fontFamily: Fonts.families.Bold,
     fontSize: Fonts.sizes.sm,
   },
 });

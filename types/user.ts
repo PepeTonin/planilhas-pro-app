@@ -24,6 +24,7 @@ export interface UserBase {
   situacaoPagamento: string;
   situacaoTreino: string;
   ativo: boolean;
-  professorVinculadoId?: number;
+  professorId?: number;
+  professorNome?: string;
   role: string;
 }

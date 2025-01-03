@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 
-import LoadingScreen from "../../../screens/LoadingScreen";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { logout } from "../../../store/features/auth";
 

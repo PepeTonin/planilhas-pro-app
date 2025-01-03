@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     top: 8,
     zIndex: -1,
     color: Colors.lightGray,
-    fontFamily: Fonts.families.Bold,
+    fontFamily: Fonts.families.Regular,
     fontSize: Fonts.sizes.md,
   },
   textInput: {
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: leftGap,
     color: Colors.white,
     fontSize: Fonts.sizes.md,
-    fontFamily: Fonts.families.Bold,
+    fontFamily: Fonts.families.Regular,
   },
   icon: {
     position: "absolute",
@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
   invalidText: {
     paddingHorizontal: leftGap,
     color: Colors.red,
-    fontFamily: Fonts.families.Medium,
+    fontFamily: Fonts.families.Light,
     fontSize: Fonts.sizes.xs,
   },
 });

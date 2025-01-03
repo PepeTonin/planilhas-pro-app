@@ -1,18 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import HomeScreen from "../../../screens/Home";
 
 export default function AuthenticatedHome() {
-  return (
-    <View style={styles.container}>
-      <Text>Welcome, authenticated user!</Text>
-    </View>
-  );
+  return <HomeScreen />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

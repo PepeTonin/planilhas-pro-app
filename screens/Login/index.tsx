@@ -24,6 +24,7 @@ interface LoginScreenProps {
   routePathnames: {
     resetPassword: string;
     signup: string;
+    home: string;
   };
 }
 
@@ -60,7 +61,7 @@ export default function LoginScreen({ routePathnames }: LoginScreenProps) {
   }, [hasError]);
 
   useEffect(() => {
-    if (isLogged) router.push("/(home)/");
+    if (isLogged) router.replace(routePathnames.home);
   }, [isLogged]);
 
   return (

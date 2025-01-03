@@ -1,9 +1,9 @@
 export const Fonts = {
   families: {
-    Regular: "Thin",
-    Medium: "Light",
-    Bold: "Regular",
-    SemiBold: "Bold",
+    Thin: "Thin",
+    Light: "Light",
+    Regular: "Regular",
+    Bold: "Bold",
     ExtraBold: "Black",
   },
   sizes: {

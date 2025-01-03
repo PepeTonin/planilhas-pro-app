@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
   },
   innerText: {
     color: Colors.primaryBlack,
-    fontFamily: Fonts.families.SemiBold,
+    fontFamily: Fonts.families.Bold,
     fontSize: Fonts.sizes.lg,
   },
   disabled: {

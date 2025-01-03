@@ -63,7 +63,7 @@ export default function ResetPasswordScreen({
         <Toast />
         <Image
           style={styles.image}
-          source={require("../../assets/images/Safe-amico (2).png")}
+          source={require("../../assets/images/Safe-amico.png")}
           resizeMode="contain"
         />
         <View style={styles.contentContainer}>
