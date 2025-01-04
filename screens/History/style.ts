@@ -12,5 +12,5 @@ export const styles = StyleSheet.create({
   cardInnerText: {
     fontFamily: Fonts.families.Regular,
     fontSize: Fonts.sizes.lg,
-  }
+  },
 });

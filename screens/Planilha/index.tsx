@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, View, Text } from "react-native";
 
 import { getActiveWorkoutPlan } from "../../api/workoutPlan";
 import { useAppSelector } from "../../store/store";
@@ -11,6 +11,7 @@ import { WorkoutPlan } from "../../types/workoutPlan";
 
 import WorkoutPlanCard from "./WorkoutPlanCard";
 import LoadingScreen from "../../components/LoadingScreen";
+import PrimaryCard from "../../components/PrimaryCard";
 
 export default function PlanilhaScreen() {
   const [isLoadingWorkout, setIsLoadingWorkout] = useState(false);
@@ -61,7 +62,7 @@ export default function PlanilhaScreen() {
 
   return (
     <View style={styles.container}>
-      {!isLoadingWorkout && workoutPlan && (
+      {workoutPlan && workoutPlan.sessoes.length > 0 ? (
         <FlatList
           data={workoutPlan.sessoes}
           renderItem={({ item }) => (
@@ -75,6 +76,14 @@ export default function PlanilhaScreen() {
           contentContainerStyle={{ gap: 20 }}
           showsVerticalScrollIndicator={false}
           ListFooterComponent={() => <View style={{ height: 20 }} />}
+        />
+      ) : (
+        <PrimaryCard
+          InnerTextElement={
+            <Text style={styles.cardInnerText}>
+              Não há nenhuma planilha ativa!
+            </Text>
+          }
         />
       )}
     </View>

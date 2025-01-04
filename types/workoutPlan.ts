@@ -31,3 +31,9 @@ export interface TrainingBlockDetails {
   idTreino: string;
   movimentos: Exercise[];
 }
+
+export interface ExpiredWorkoutPlan {
+  idPlanilha: number;
+  dataInicio: string;
+  dataFim: string;
+}

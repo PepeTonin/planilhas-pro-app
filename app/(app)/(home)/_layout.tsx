@@ -53,7 +53,7 @@ export default function AuthenticatedHomeLayout() {
         }}
       />
       <Tabs.Screen
-        name="anteriores"
+        name="history"
         options={{
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
@@ -63,7 +63,7 @@ export default function AuthenticatedHomeLayout() {
             />
           ),
           tabBarLabel: ({ focused }) =>
-            focused ? <Text style={styles.label}>Anteriores</Text> : <></>,
+            focused ? <Text style={styles.label}>Histórico</Text> : <></>,
         }}
       />
       <Tabs.Screen
@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
   label: {
     paddingLeft: 4,
     fontFamily: Fonts.families.Bold,
-    fontSize: Fonts.sizes.lg,
+    fontSize: Fonts.sizes.md,
   },
 });
