@@ -36,8 +36,6 @@ export default function HistoryScreen() {
     populateHistory();
   }, []);
 
-  console.log(history);
-
   if (loadingHistory) {
     return <LoadingScreen />;
   }
