@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "710142636863",
+    "project_id": "planilhas-pro-ser",
+    "storage_bucket": "planilhas-pro-ser.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710142636863:android:eeb50519826fc1cc4c598a",
+        "android_client_info": {
+          "package_name": "com.pepetonin.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtWQu1UIkTq2RK-VbVNacDyvNWUjcGZ3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
