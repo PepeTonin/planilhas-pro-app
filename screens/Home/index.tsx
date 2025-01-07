@@ -32,13 +32,11 @@ export default function HomeScreen() {
         studentName={user!.nome}
         studentAvatarUrl="https://i.pravatar.cc/300"
       />
-      <PrimaryCard
-        InnerTextElement={
-          user?.professorNome
-            ? cardInnerTextObj.hasProfessorVinculado
-            : cardInnerTextObj.hasNot
-        }
-      />
+      <PrimaryCard>
+        {user?.professorNome
+          ? cardInnerTextObj.hasProfessorVinculado
+          : cardInnerTextObj.hasNot}
+      </PrimaryCard>
     </View>
   );
 }

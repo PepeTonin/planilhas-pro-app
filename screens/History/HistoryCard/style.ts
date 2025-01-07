@@ -34,5 +34,6 @@ export const styles = StyleSheet.create({
   },
   btnContainer: {
     justifyContent: "center",
+    paddingRight: 10,
   },
 });

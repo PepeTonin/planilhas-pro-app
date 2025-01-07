@@ -23,11 +23,14 @@ interface TraningBlockDetailsScreenProps {
   trainingBlockId: string;
   blockTitle: string;
   sessionTitle: string;
+  hasDone?: boolean;
 }
+
 export default function TraningBlockDetailsScreen({
   trainingBlockId,
   blockTitle,
   sessionTitle,
+  hasDone = true,
 }: TraningBlockDetailsScreenProps) {
   const [trainingBlockDetails, setTrainingBlockDetails] =
     useState<TrainingBlockDetails>();
@@ -82,8 +85,8 @@ export default function TraningBlockDetailsScreen({
           renderItem={({ item }) => (
             <TrainingCard
               exercise={item}
-              isDone={doneExercises.includes(item.idMovimento)}
-              toggleDone={toggleExerciseDone}
+              isDone={hasDone && doneExercises.includes(item.idMovimento)}
+              toggleDone={hasDone ? toggleExerciseDone : undefined}
             />
           )}
           contentContainerStyle={{ gap: 20 }}

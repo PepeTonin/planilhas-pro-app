@@ -11,8 +11,8 @@ import { Colors } from "../../../styles/Colors";
 import { Exercise } from "../../../types/workoutPlan";
 
 interface WorkoutPlanCardProps {
-  isDone: boolean;
-  toggleDone: (id: number) => void;
+  isDone?: boolean;
+  toggleDone?: (id: number) => void;
   exercise: Exercise;
 }
 
@@ -30,17 +30,19 @@ export default function TrainingCard({
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Pressable onPress={() => toggleDone(exercise.idMovimento)}>
-          {isDone ? (
-            <FontAwesome5
-              name="check-square"
-              size={24}
-              color={Colors.whiteF5}
-            />
-          ) : (
-            <FontAwesome5 name="square" size={24} color={Colors.whiteF5} />
-          )}
-        </Pressable>
+        {toggleDone && isDone != null && (
+          <Pressable onPress={() => toggleDone(exercise.idMovimento)}>
+            {isDone ? (
+              <FontAwesome5
+                name="check-square"
+                size={24}
+                color={Colors.whiteF5}
+              />
+            ) : (
+              <FontAwesome5 name="square" size={24} color={Colors.whiteF5} />
+            )}
+          </Pressable>
+        )}
         <Text
           numberOfLines={1}
           style={[styles.title, isDone && styles.titleDone]}

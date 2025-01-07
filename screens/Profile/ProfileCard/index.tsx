@@ -25,9 +25,13 @@ export default function ProfileCard({ user }: ProfileCardProps) {
           </Text>
         </View>
       </View>
-      <Text style={styles.regularText}>
+      <Text
+        style={[styles.regularText, !user.professorNome && styles.warningText]}
+      >
         Professor:{" "}
-        <Text style={styles.highlightedText}>{user.professorNome}</Text>
+        <Text style={styles.highlightedText}>
+          {user.professorNome || "Não há!"}
+        </Text>
       </Text>
       <Text style={styles.regularText}>
         Situação de pagamento:{" "}

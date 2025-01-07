@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { FlatList, View, Text } from "react-native";
 
 import { getActiveWorkoutPlan } from "../../api/workoutPlan";
-import { useAppSelector } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { updateUserData } from "../../store/features/auth";
 
 import { styles } from "./style";
 
@@ -20,6 +21,7 @@ export default function PlanilhaScreen() {
   const [doneSessions, setDoneSessions] = useState<number[]>([]);
 
   const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   function toggleSessionDone(id: number) {
     if (doneSessions.includes(id)) {
@@ -36,6 +38,12 @@ export default function PlanilhaScreen() {
     setIsLoadingWorkout(false);
     if (!workoutPlan) return;
     setWorkoutPlan(workoutPlan);
+  }
+
+  async function handleSyncWorkoutPlan() {
+    await getWorkoutPlan();
+    if (!user) return;
+    dispatch(updateUserData(user.firebaseId));
   }
 
   function navigateToTrainingBlockDetails(blockId: number, sessionId: number) {
@@ -78,13 +86,11 @@ export default function PlanilhaScreen() {
           ListFooterComponent={() => <View style={{ height: 20 }} />}
         />
       ) : (
-        <PrimaryCard
-          InnerTextElement={
-            <Text style={styles.cardInnerText}>
-              Não há nenhuma planilha ativa!
-            </Text>
-          }
-        />
+        <PrimaryCard variant="sync" onPress={handleSyncWorkoutPlan}>
+          <Text style={styles.cardInnerText}>
+            Não há nenhuma planilha ativa!
+          </Text>
+        </PrimaryCard>
       )}
     </View>
   );

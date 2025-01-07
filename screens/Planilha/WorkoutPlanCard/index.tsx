@@ -12,8 +12,8 @@ import { Colors } from "../../../styles/Colors";
 import { WorkoutPlanSession } from "../../../types/workoutPlan";
 
 interface WorkoutPlanCardProps {
-  isDone: boolean;
-  toggleDone: (id: number) => void;
+  isDone?: boolean;
+  toggleDone?: (id: number) => void;
   session: WorkoutPlanSession;
   handlePressBlock: (blockId: number, sessionId: number) => void;
 }
@@ -33,17 +33,19 @@ export default function WorkoutPlanCard({
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Pressable onPress={() => toggleDone(session.idSessao)}>
-          {isDone ? (
-            <FontAwesome5
-              name="check-square"
-              size={24}
-              color={Colors.whiteF5}
-            />
-          ) : (
-            <FontAwesome5 name="square" size={24} color={Colors.whiteF5} />
-          )}
-        </Pressable>
+        {toggleDone && isDone != null && (
+          <Pressable onPress={() => toggleDone(session.idSessao)}>
+            {isDone ? (
+              <FontAwesome5
+                name="check-square"
+                size={24}
+                color={Colors.whiteF5}
+              />
+            ) : (
+              <FontAwesome5 name="square" size={24} color={Colors.whiteF5} />
+            )}
+          </Pressable>
+        )}
         <Text
           numberOfLines={1}
           style={[styles.title, isDone && styles.titleDone]}
@@ -61,32 +63,39 @@ export default function WorkoutPlanCard({
 
       {isExpanded && (
         <View style={styles.expandedContainer}>
-          {session.blocos.map((bloco) =>
-            bloco.tituloBloco ? (
-              <Pressable
-                key={bloco.idBloco}
-                style={styles.blockContainer}
-                onPress={() =>
-                  handlePressBlock(bloco.idBloco, session.idSessao)
-                }
-              >
-                <MaterialCommunityIcons
-                  name="file-table-outline"
-                  size={28}
-                  color={Colors.primaryGreen}
-                />
-                <Text style={styles.blockTitle}>{bloco.tituloBloco}</Text>
-              </Pressable>
-            ) : (
-              <View key={bloco.idBloco} style={styles.blockContainer}>
-                <FontAwesome5
-                  name="bed"
-                  size={24}
-                  color={Colors.primaryGreen}
-                />
-                <Text style={styles.blockTitle}>Descanso</Text>
-              </View>
+          {session.blocos.length > 0 ? (
+            session.blocos.map((bloco) =>
+              bloco.tituloBloco ? (
+                <Pressable
+                  key={bloco.idBloco}
+                  style={styles.blockContainer}
+                  onPress={() =>
+                    handlePressBlock(bloco.idBloco, session.idSessao)
+                  }
+                >
+                  <MaterialCommunityIcons
+                    name="file-table-outline"
+                    size={28}
+                    color={Colors.primaryGreen}
+                  />
+                  <Text style={styles.blockTitle}>{bloco.tituloBloco}</Text>
+                </Pressable>
+              ) : (
+                <View key={bloco.idBloco} style={styles.blockContainer}>
+                  <FontAwesome5
+                    name="bed"
+                    size={24}
+                    color={Colors.primaryGreen}
+                  />
+                  <Text style={styles.blockTitle}>Descanso</Text>
+                </View>
+              )
             )
+          ) : (
+            <View style={styles.blockContainer}>
+              <FontAwesome5 name="bed" size={24} color={Colors.primaryGreen} />
+              <Text style={styles.blockTitle}>Descanso</Text>
+            </View>
           )}
         </View>
       )}

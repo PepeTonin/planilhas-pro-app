@@ -31,4 +31,7 @@ export const styles = StyleSheet.create({
   highlightedText: {
     fontFamily: Fonts.families.Bold,
   },
+  warningText: {
+    color: Colors.red,
+  },
 });

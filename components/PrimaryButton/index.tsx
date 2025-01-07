@@ -1,6 +1,7 @@
-import { Text, Pressable, ActivityIndicator } from "react-native";
+import { Text, Pressable, ActivityIndicator, View } from "react-native";
 import { Link } from "expo-router";
 import { Entypo } from "@expo/vector-icons";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 import { styles } from "./style";
 import { Colors } from "../../styles/Colors";
@@ -13,6 +14,8 @@ interface Props {
   isDisabled?: boolean;
   isLoading?: boolean;
   hasLoadedSuccessfully?: boolean;
+  hasIcon?: boolean;
+  icon?: "sync";
 }
 
 export default function PrimaryButton({
@@ -23,7 +26,15 @@ export default function PrimaryButton({
   isDisabled = false,
   isLoading = false,
   hasLoadedSuccessfully = false,
+  hasIcon = false,
+  icon,
 }: Props) {
+  const iconObj = {
+    sync: (
+      <FontAwesome5 name="sync-alt" size={20} color={Colors.primaryBlack} />
+    ),
+  };
+
   if (link && pathname) {
     return (
       <Link
@@ -49,6 +60,11 @@ export default function PrimaryButton({
         <ActivityIndicator size="small" color={Colors.primaryGreen} />
       ) : hasLoadedSuccessfully ? (
         <Entypo name="check" size={28} color={Colors.primaryBlack} />
+      ) : hasIcon && icon ? (
+        <View style={styles.iconBtnContainer}>
+          {iconObj[icon]}
+          <Text style={styles.innerText}>{label}</Text>
+        </View>
       ) : (
         <Text style={styles.innerText}>{label}</Text>
       )}

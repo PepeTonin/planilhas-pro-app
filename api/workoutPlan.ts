@@ -6,6 +6,12 @@ import {
   WorkoutPlan,
 } from "../types/workoutPlan";
 
+import {
+  mapPlanilhaByIdResponseToPlanilhaAtiva,
+  WorkoutPlanHistory,
+} from "../utils/mapping";
+import { AxiosResponse } from "axios";
+
 export async function getActiveWorkoutPlan(
   idAluno: number
 ): Promise<WorkoutPlan | undefined> {
@@ -14,7 +20,7 @@ export async function getActiveWorkoutPlan(
     const response = await axiosInstance.get(url);
     return response.data;
   } catch (error) {
-    console.log("Error@api/aluno.ts/getActiveWorkoutPlan(): ", error);
+    console.log("Error@api/workoutPlan.ts/getActiveWorkoutPlan(): ", error);
   }
 }
 
@@ -26,7 +32,7 @@ export async function getTrainingBlockDetails(
     const response = await axiosInstance.get(url);
     return response.data;
   } catch (error) {
-    console.log("Error@api/aluno.ts/getTrainingBlockDetails(): ", error);
+    console.log("Error@api/workoutPlan.ts/getTrainingBlockDetails(): ", error);
   }
 }
 
@@ -38,6 +44,20 @@ export async function getWorkoutPlanHistory(
     const response = await axiosInstance.get(url);
     return response.data;
   } catch (error) {
-    console.log("Error@api/aluno.ts/getWorkoutPlanHistory(): ", error);
+    console.log("Error@api/workoutPlan.ts/getWorkoutPlanHistory(): ", error);
+  }
+}
+
+export async function getWorkoutPlanById(
+  idPlanilha: string
+): Promise<WorkoutPlan | undefined> {
+  try {
+    const response: AxiosResponse<WorkoutPlanHistory | undefined> =
+      await axiosInstance.get(`/planilha/${idPlanilha}`);
+
+    if (!response.data) return undefined;
+    return mapPlanilhaByIdResponseToPlanilhaAtiva(response.data);
+  } catch (error) {
+    console.log("Error@api/workoutPlan.ts/getWorkoutPlanById(): ", error);
   }
 }

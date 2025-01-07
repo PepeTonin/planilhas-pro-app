@@ -43,6 +43,15 @@ export const signup = createAsyncThunk(
   }
 );
 
+export const updateUserData = createAsyncThunk(
+  "auth/updateUser",
+  async (firebaseId: string) => {
+    const aluno = await getAlunoByFirebaseId(firebaseId);
+    if (!aluno) throw new Error("Aluno não encontrado");
+    return aluno;
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -85,6 +94,9 @@ export const authSlice = createSlice({
       state.isLogging = false;
       state.hasError = true;
       state.isAccountCreated = false;
+    });
+    builder.addCase(updateUserData.fulfilled, (state, action) => {
+      state.user = action.payload;
     });
   },
 });

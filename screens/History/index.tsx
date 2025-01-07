@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { View, ActivityIndicator, FlatList, Text } from "react-native";
+import { View, FlatList, Text } from "react-native";
+import { router } from "expo-router";
 
 import { getWorkoutPlanHistory } from "../../api/workoutPlan";
-import { useAppSelector } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { updateUserData } from "../../store/features/auth";
 
 import { styles } from "./style";
-import { Colors } from "../../styles/Colors";
 
 import { ExpiredWorkoutPlan } from "../../types/workoutPlan";
 
@@ -17,6 +18,7 @@ export default function HistoryScreen() {
   const [history, setHistory] = useState<ExpiredWorkoutPlan[]>();
   const [loadingHistory, setLoadingHistory] = useState(true);
 
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
 
   async function populateHistory() {
@@ -28,8 +30,20 @@ export default function HistoryScreen() {
     setHistory(expiredWorkoutPlans);
   }
 
-  function navigateToWorkoutPlanDetails(id: number) {
-    console.log("Navigate to workout plan details", id);
+  async function handleSyncHistory() {
+    await populateHistory();
+    if (!user) return;
+    dispatch(updateUserData(user.firebaseId));
+  }
+
+  function navigateToWorkoutPlanDetails(workoutPlan: ExpiredWorkoutPlan) {
+    router.push({
+      pathname: `/workoutPlan/${workoutPlan.idPlanilha}`,
+      params: {
+        startDate: workoutPlan.dataInicio,
+        endDate: workoutPlan.dataFim,
+      },
+    });
   }
 
   useEffect(() => {
@@ -47,9 +61,7 @@ export default function HistoryScreen() {
           data={history}
           renderItem={({ item }) => (
             <HistoryCard
-              workoutPlanId={item.idPlanilha}
-              startDate={item.dataInicio}
-              endDate={item.dataFim}
+              workoutPlan={item}
               onCardPress={navigateToWorkoutPlanDetails}
             />
           )}
@@ -58,12 +70,14 @@ export default function HistoryScreen() {
         />
       ) : (
         <PrimaryCard
-          InnerTextElement={
-            <Text style={styles.cardInnerText}>
-              Não há nenhuma planilha ativa!
-            </Text>
-          }
-        />
+          variant="sync"
+          onPress={handleSyncHistory}
+          loadingBtn={loadingHistory}
+        >
+          <Text style={styles.cardInnerText}>
+            Não há nenhuma planilha em seu histórico de treinos!
+          </Text>
+        </PrimaryCard>
       )}
     </View>
   );

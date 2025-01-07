@@ -20,5 +20,11 @@ export const styles = StyleSheet.create({
   },
   disabled: {
     backgroundColor: Colors.mediumGray,
-  }
+  },
+  iconBtnContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
 });
